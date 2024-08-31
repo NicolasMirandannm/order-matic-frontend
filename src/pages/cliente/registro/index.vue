@@ -8,12 +8,13 @@
     phone: '',
     password: '',
   })
+  const termsAccepted = ref(false)
   const showPassword = ref(false)
   const valid = ref(false)
   const rules = ref<RulesType>({
     required: (value: string) => !!value || 'Campo obrigatório!',
     email: (value: string) => /.+@.+\..+/.test(value) || 'O e-mail deve ser válido.',
-    phone: (value: string) => (/^\d+$/.test(value) && value.length === 11) || 'O telefone deve ser válido.',
+    phone: (value: string) => extractDigits(value).length === 11 || 'O telefone deve ser válido.',
     password: (value: string) => value.length >= 6 || 'A senha deve possuir no mínimo 6 caracteres.',
   })
   const form = ref()
@@ -108,6 +109,7 @@
           <v-text-field
             v-model="user.password"
             :append-inner-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+            autocomplete="on"
             class="mb-4"
             :color="isValidInput(user.password, 'password') ? 'success' : 'error'"
             label="Senha"
@@ -115,14 +117,27 @@
             :rules="[rules.required, rules.password]"
             :type="showPassword ? 'text' : 'password'"
             variant="outlined"
-            autocomplete="on"
             @click:append-inner="showPassword = !showPassword"
           />
+
+          <v-row>
+            <v-col cols="12">
+              <v-checkbox
+                v-model="termsAccepted"
+                required
+              >
+                <template #label>
+                  <span>Eu aceito os <a href="#">Termos de Uso e a Política de Privacidade.</a></span>
+                </template>
+              </v-checkbox>
+            </v-col>
+          </v-row>
 
           <v-btn
             block
             class="mt-4 btn"
-            :disabled="!valid"
+            :color="!valid || !termsAccepted ? 'none' : 'primary'"
+            :disabled="!valid || !termsAccepted"
             size="large"
             @click="submit"
           >
@@ -137,7 +152,6 @@
 <style scoped>
   .register-container {
     min-height: 100vh;
-    background-color: rgba(30, 30, 30, 0.43);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -148,7 +162,7 @@
   }
 
   .text-title {
-    color: #cecece;
+    color: #757575;
     margin-bottom: 12px;
     font-size: clamp(12px, 6vw, 48px);
     text-align: center;
