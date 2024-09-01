@@ -6,7 +6,7 @@
       icon
       @click="toggleTheme"
     >
-      <v-icon>{{ isDark ? 'mdi-weather-sunny' : 'mdi-weather-night' }}</v-icon>
+      <v-icon>{{ isDark ? 'mdi-weather-night' : 'mdi-weather-sunny' }}</v-icon>
     </v-btn>
 
     <v-main>

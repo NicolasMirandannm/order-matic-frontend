@@ -1,12 +1,20 @@
 <script setup lang="ts">
+  import { CustomerRestSingleton } from '@/services/api/customer/customer-rest-singleton'
+  import { CustomerDto } from '@/services/api/customer/customer-types'
+  import HttpException from '@/services/exceptions/http-exception'
   import { computed, ref } from 'vue'
   import { RulesType } from './types'
+  import AlertException from '@/components/exception/AlertException.vue'
 
-  const user = ref({
+  const user = ref<CustomerDto>({
     name: '',
     email: '',
     phone: '',
     password: '',
+  })
+  const hasException = ref({
+    show: false,
+    message: '',
   })
   const termsAccepted = ref(false)
   const showPassword = ref(false)
@@ -22,11 +30,28 @@
   // functions
   const submit = () => {
     if (form.value?.validate()) {
-      console.log('Form Submitted:', user.value)
+      const customerRestService = CustomerRestSingleton.getInstance()
+      user.value.phone = extractDigits(user.value.phone)
+      customerRestService.registerCustomer(user.value)
+        .then(() => {
+          alert('Usuário cadastrado com sucesso!')
+        })
+        .catch((err: HttpException) => {
+          exceptionAlertHandler(true, err?.data || 'Ocorreu algum erro ao cadastrar usuário!')
+        })
+        .then(() => {
+          form.value?.reset()
+        })
     } else {
       console.log('Form is not valid')
     }
   }
+
+  const exceptionAlertHandler = (show: boolean, message?: string) => {
+    hasException.value.show = show
+    hasException.value.message = message ?? ''
+  }
+
   const extractDigits = (value: string) => {
     return value.replace(/\D/g, '')
   }
@@ -62,6 +87,7 @@
 
 <template>
   <v-container class="register-container" fluid>
+    <AlertException :message="hasException.message" :show="hasException.show" @update:show="exceptionAlertHandler" />
     <v-row align="center" justify="center">
       <v-col cols="10" md="6" sm="8">
         <v-card-title class="title">
@@ -111,7 +137,7 @@
             :append-inner-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
             autocomplete="on"
             class="mb-4"
-            :color="isValidInput(user.password, 'password') ? 'success' : 'error'"
+            :color="user.password && isValidInput(user.password, 'password') ? 'success' : 'error'"
             label="Senha"
             required
             :rules="[rules.required, rules.password]"
