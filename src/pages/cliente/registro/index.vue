@@ -7,9 +7,9 @@
   import AlertException from '@/components/exception/AlertException.vue'
 
   const user = ref<CustomerDto>({
-    name: '',
+    username: '',
     email: '',
-    phone: '',
+    phoneNumber: '',
     password: '',
   })
   const hasException = ref({
@@ -31,7 +31,7 @@
   const submit = () => {
     if (form.value?.validate()) {
       const customerRestService = CustomerRestSingleton.getInstance()
-      user.value.phone = extractDigits(user.value.phone)
+      user.value.phoneNumber = extractDigits(user.value.phoneNumber)
       customerRestService.registerCustomer(user.value)
         .then(() => {
           alert('Usuário cadastrado com sucesso!')
@@ -78,9 +78,9 @@
   })
 
   const computedPhone = computed({
-    get: () => user.value.phone,
+    get: () => user.value.phoneNumber,
     set: (value: string) => {
-      user.value.phone = phoneMask(value)
+      user.value.phoneNumber = phoneMask(value)
     },
   })
 </script>
@@ -96,10 +96,10 @@
         </v-card-title>
         <v-form ref="form" v-model="valid" lazy-validation>
           <v-text-field
-            v-model="user.name"
+            v-model="user.username"
             class="mb-4"
             clearable
-            :color="isValidInput(user.name) ? 'success' : 'error'"
+            :color="isValidInput(user.username) ? 'success' : 'error'"
             label="Nome"
             required
             :rules="[rules.required]"
@@ -122,7 +122,7 @@
             v-model="computedPhone"
             class="mb-4"
             clearable
-            :color="isValidInput(user.phone, 'phone') ? 'success' : 'error'"
+            :color="isValidInput(user.phoneNumber, 'phone') ? 'success' : 'error'"
             label="Telefone"
             maxlength="15"
             placeholder="(99) 99999-9999"

@@ -15,7 +15,7 @@ export class CustomerRestSingleton extends AbstractRestApiService<CustomerDto> i
   }
 
   public async registerCustomer (data: CustomerDto): Promise<void> {
-    await this.asyncPost('customer/register', data)
+    await this.asyncPost('security/customer-user', data)
   }
 
   protected parseResponseData (response: Response): Promise<CustomerDto> {
