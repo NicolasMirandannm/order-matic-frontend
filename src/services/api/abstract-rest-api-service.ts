@@ -101,7 +101,7 @@ export abstract class AbstractRestApiService<T> {
   private async verifyException (response: Response): Promise<void> {
     let message
     try {
-      message = await response.json()?.message
+      message = (await response.json())?.message
     } catch (error) { }
     if (response.status >= 400) {
       throw new HttpException(response, message)
