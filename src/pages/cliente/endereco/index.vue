@@ -1,9 +1,9 @@
 <script setup lang="ts">
-
+  import Apartamento from '@/components/page-component/endereco/apartamento.vue'
 </script>
 
 <template>
-  <v-container class="container" fluid>
+  <v-container class="register-container" fluid>
     <v-row align="center" justify="center">
       <v-col cols="11" md="8">
         <v-card-title class="title">
@@ -63,6 +63,11 @@
                     label="Complemento"
                     variant="outlined"
                   />
+                </v-col>
+                <v-col class="field-row" cols="12">
+                  <v-row>
+                    <Apartamento />
+                  </v-row>
                 </v-col>
               </v-row>
             </v-col>
