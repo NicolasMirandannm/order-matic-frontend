@@ -19,11 +19,13 @@ export type ApartmentDto = {
   observation: string;
 }
 
-export type AddressDtp = {
+export type AddressDto = {
   id?: string;
   number: number;
+  cep: string;
   street: string;
   neighborhood: string;
+  reference: string;
   city: string;
   state: string;
   isCommercialAddress: boolean;
