@@ -76,6 +76,10 @@
       console.error('Form is not valid')
     }
   }
+  const hasException = ref({
+    show: false,
+    message: '',
+  })
   const exceptionAlertHandler = (show: boolean, message?: string) => {
     hasException.value.show = show
     hasException.value.message = message ?? ''
@@ -219,6 +223,7 @@
                 dark
                 :disabled="!valid"
                 width="50%"
+                @click="submit"
               >
                 Cadastrar
               </v-btn>
