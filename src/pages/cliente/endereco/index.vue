@@ -1,6 +1,9 @@
 <script setup lang="ts">
+  import AlertException from '@/components/exception/AlertException.vue'
   import Apartamento from '@/components/page-component/endereco/apartamento.vue'
+  import { CustomerRestSingleton } from '@/services/api/customer/customer-rest-singleton'
   import { AddressDto, ApartmentDto, CondominiumDto } from '@/services/api/customer/customer-types'
+  import HttpException from '@/services/exceptions/http-exception'
   import { computed, ref } from 'vue'
 
   type EnderecoRulesType = {
@@ -42,7 +45,6 @@
   const computedCep = computed({
     get: () => endereco.value.cep,
     set: (value: string) => {
-      console.log(endereco.value.cep)
       endereco.value.cep = cepMask(value)
     },
   })
@@ -57,10 +59,32 @@
     if (digits.length <= 5) return digits
     if (digits.length <= 9) return `${digits.slice(0, 5)}-${digits.slice(5)}`
   }
+  const submit = () => {
+    if (form.value?.validate()) {
+      const customerRestService = CustomerRestSingleton.getInstance()
+      customerRestService.createAddress(endereco.value)
+        .then(() => {
+          alert('Endereço cadastrado com sucesso!')
+        })
+        .catch((err: HttpException) => {
+          exceptionAlertHandler(true, err?.data || 'Ocorreu algum erro ao cadastrar endereço!')
+        })
+        .then(() => {
+          form.value?.reset()
+        })
+    } else {
+      console.error('Form is not valid')
+    }
+  }
+  const exceptionAlertHandler = (show: boolean, message?: string) => {
+    hasException.value.show = show
+    hasException.value.message = message ?? ''
+  }
 </script>
 
 <template>
   <v-container class="register-container" fluid>
+    <AlertException :message="hasException.message" :show="hasException.show" @update:show="exceptionAlertHandler" />
     <v-row align="center" justify="center">
       <v-col cols="11" md="8">
         <v-card-title class="title">

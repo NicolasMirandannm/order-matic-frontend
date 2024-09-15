@@ -1,4 +1,5 @@
 import HttpException from '@/services/exceptions/http-exception'
+import { getCookie } from '@/services/utils/cookies-utils'
 
 export abstract class AbstractRestApiService<T> {
   protected static readonly TOKEN_KEY = 'token'
@@ -18,7 +19,7 @@ export abstract class AbstractRestApiService<T> {
     return this.parseResponseData(response)
   }
 
-  protected async syncPost (rote: string, data: T): Promise<T> {
+  protected async syncPost (rote: string, data: T, parseResponseFunction?: (data: Response) => any): Promise<T> {
     const response = await fetch(this.getUrl(rote), {
       method: 'POST',
       body: JSON.stringify(data),
@@ -27,7 +28,7 @@ export abstract class AbstractRestApiService<T> {
         Authorization: this.getAuthorizationToken(),
       },
     })
-    return this.parseResponseData(response)
+    return parseResponseFunction ? parseResponseFunction(response) : this.parseResponseData(response)
   }
 
   protected async syncPut (rote: string, data: T): Promise<T> {
@@ -88,7 +89,7 @@ export abstract class AbstractRestApiService<T> {
   }
 
   private getAuthorizationToken (): string {
-    const token = localStorage.getItem('token')
+    const token = getCookie(AbstractRestApiService.TOKEN_KEY)
     return token ? `Bearer ${token}` : ''
   }
 
