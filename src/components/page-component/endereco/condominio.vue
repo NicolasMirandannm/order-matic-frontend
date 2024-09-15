@@ -13,7 +13,7 @@
       <v-col cols="12">
         <v-card-title class="title">
           <div class="title-container">
-            <p class="font-weight-regular text-title">Apartamento</p>
+            <p class="font-weight-regular text-title">Condomínio</p>
             <v-btn variant="plain" @click="close">
               <v-icon>mdi-close</v-icon>
             </v-btn>
@@ -25,13 +25,13 @@
             <v-row>
               <v-col cols="12" style="padding-bottom: 0">
                 <v-row>
-                  <v-col cols="6" style="padding-right: 0">
+                  <v-col cols="8" style="padding-right: 0">
                     <v-text-field
-                      label="Andar"
+                      label="Número da casa"
                       variant="outlined"
                     />
                   </v-col>
-                  <v-col cols="6">
+                  <v-col cols="4">
                     <v-text-field
                       label="Bloco"
                       variant="outlined"
@@ -40,20 +40,10 @@
                 </v-row>
               </v-col>
               <v-col class="field-row" cols="12">
-                <v-row>
-                  <v-col cols="8" style="padding-right: 0">
-                    <v-text-field
-                      label="Observação"
-                      variant="outlined"
-                    />
-                  </v-col>
-                  <v-col cols="4">
-                    <v-text-field
-                      label="Número"
-                      variant="outlined"
-                    />
-                  </v-col>
-                </v-row>
+                <v-text-field
+                  label="Observação"
+                  variant="outlined"
+                />
               </v-col>
             </v-row>
           </v-col>

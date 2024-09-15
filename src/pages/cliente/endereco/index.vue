@@ -1,5 +1,8 @@
 <script setup lang="ts">
   import Apartamento from '@/components/page-component/endereco/apartamento.vue'
+
+  const hasApartamento = ref(false)
+  const hasCondominio = ref(false)
 </script>
 
 <template>
@@ -65,8 +68,25 @@
                   />
                 </v-col>
                 <v-col class="field-row" cols="12">
-                  <v-row>
-                    <Apartamento />
+                  <v-row v-if="hasApartamento.valueOf()">
+                    <Apartamento @update:open="(val: Boolean) => hasApartamento = val" />
+                  </v-row>
+                  <v-row v-else>
+                    <v-checkbox
+                      v-model="hasApartamento"
+                      label="Endereço faz parte de um apartamento."
+                    />
+                  </v-row>
+                </v-col>
+                <v-col class="field-row" cols="12">
+                  <v-row v-if="hasCondominio">
+                    <Condominio @update:open="(val: Boolean) => hasCondominio = val" />
+                  </v-row>
+                  <v-row v-else>
+                    <v-checkbox
+                      v-model="hasCondominio"
+                      label="Endereço faz parte de um condomínio."
+                    />
                   </v-row>
                 </v-col>
               </v-row>
@@ -76,7 +96,6 @@
                 color="primary"
                 dark
                 width="50%"
-                @click="submit"
               >
                 Cadastrar
               </v-btn>
