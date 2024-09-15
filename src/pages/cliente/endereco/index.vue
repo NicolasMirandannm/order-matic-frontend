@@ -3,6 +3,7 @@
 
   const hasApartamento = ref(false)
   const hasCondominio = ref(false)
+  const isEnderecoComercial = ref(false)
 </script>
 
 <template>
@@ -63,12 +64,18 @@
                 </v-col>
                 <v-col class="field-row" cols="12">
                   <v-text-field
-                    label="Complemento"
+                    label="Referência"
                     variant="outlined"
                   />
                 </v-col>
                 <v-col class="field-row" cols="12">
-                  <v-row v-if="hasApartamento.valueOf()">
+                  <v-checkbox
+                    v-model="isEnderecoComercial"
+                    label="Endereço comercial."
+                  />
+                </v-col>
+                <v-col class="field-row" cols="12">
+                  <v-row v-if="hasApartamento">
                     <Apartamento @update:open="(val: Boolean) => hasApartamento = val" />
                   </v-row>
                   <v-row v-else>
