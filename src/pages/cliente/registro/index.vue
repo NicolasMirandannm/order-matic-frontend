@@ -43,7 +43,7 @@
           form.value?.reset()
         })
     } else {
-      console.log('Form is not valid')
+      console.error('Form is not valid')
     }
   }
 
